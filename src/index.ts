@@ -13,6 +13,22 @@
 
 export default {
 	async fetch(request, env, ctx): Promise<Response> {
-		return new Response('Hello World!');
-	},
+		//return new Response('Hello World!');
+		const post_data = await request.json();
+
+		const webhook_body = {
+			"content": post_data.body
+		}
+
+		console.log(post_data)
+		// @ts-ignore
+		await fetch(env.API_HOST, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(webhook_body)
+		})
+		return new Response('OK')
+	}
 } satisfies ExportedHandler<Env>;
